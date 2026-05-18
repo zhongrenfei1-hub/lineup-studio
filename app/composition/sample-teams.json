@@ -1,0 +1,192 @@
+[
+  {
+    "tag": "EDG",
+    "name": "EDward Gaming",
+    "region": "China",
+    "logo": "https://owcdn.net/img/62c82049253b2.png",
+    "color": "#DC2626",
+    "accent": "#FCA5A5",
+    "players": [
+      {
+        "id": "3017",
+        "alias": "nobody",
+        "real": "Wang Senxu (王森旭)",
+        "avatar": "https://owcdn.net/img/677fe4210de6e.png",
+        "url": "https://www.vlr.gg/player/3017/nobody",
+        "stats": {
+          "rating": 0.93,
+          "acs": 167.1,
+          "kd": 0.88,
+          "kast": 71.0,
+          "adr": 110.8,
+          "hs": 27.0,
+          "rnd": 435.0
+        },
+        "tagline": "Smokes · Anchor"
+      },
+      {
+        "id": "3520",
+        "alias": "ZmjjKK",
+        "real": "Zheng Yongkang (郑永康)",
+        "avatar": "https://owcdn.net/img/677fe40edf9da.png",
+        "url": "https://www.vlr.gg/player/3520/zmjjkk",
+        "stats": {
+          "rating": 1.08,
+          "acs": 241.2,
+          "kd": 1.17,
+          "kast": 71.0,
+          "adr": 158.2,
+          "hs": 24.0,
+          "rnd": 435.0
+        },
+        "tagline": "Duelist · Top Frag"
+      },
+      {
+        "id": "15559",
+        "alias": "CHICHOO",
+        "real": "Wan Shunzhi (万顺治)",
+        "avatar": "https://owcdn.net/img/677fe4289bb34.png",
+        "url": "https://www.vlr.gg/player/15559/chichoo",
+        "stats": {
+          "rating": 1.21,
+          "acs": 218.7,
+          "kd": 1.27,
+          "kast": 77.0,
+          "adr": 142.2,
+          "hs": 29.0,
+          "rnd": 435.0
+        },
+        "tagline": "IGL · Star Player"
+      },
+      {
+        "id": "4742",
+        "alias": "Smoggy",
+        "real": "Zhang Zhao (张钊)",
+        "avatar": "https://owcdn.net/img/677fe435edc57.png",
+        "url": "https://www.vlr.gg/player/4742/smoggy",
+        "stats": {
+          "rating": 1.2,
+          "acs": 227.9,
+          "kd": 1.2,
+          "kast": 78.0,
+          "adr": 149.6,
+          "hs": 26.0,
+          "rnd": 435.0
+        },
+        "tagline": "Initiator"
+      },
+      {
+        "id": "51244",
+        "alias": "Jieni7",
+        "real": "Zhang Juntai (张君泰)",
+        "avatar": "https://owcdn.net/img/67e2e8846d5a5.png",
+        "url": "https://www.vlr.gg/player/51244/jieni7",
+        "stats": {
+          "rating": 0.91,
+          "acs": 183.5,
+          "kd": 0.89,
+          "kast": 75.0,
+          "adr": 118.1,
+          "hs": 24.0,
+          "rnd": 435.0
+        },
+        "tagline": "Flex Duelist"
+      }
+    ]
+  },
+  {
+    "tag": "PRX",
+    "name": "Paper Rex",
+    "region": "Singapore",
+    "logo": "https://owcdn.net/img/62bbeba74d5cb.png",
+    "color": "#FB923C",
+    "accent": "#FED7AA",
+    "players": [
+      {
+        "id": "8504",
+        "alias": "invy",
+        "real": "Adrian Jiggs Reyes",
+        "avatar": "https://owcdn.net/img/69735f4a21e3b.png",
+        "url": "https://www.vlr.gg/player/8504/invy",
+        "stats": {
+          "rating": 1.07,
+          "acs": 195.0,
+          "kd": 1.08,
+          "kast": 75.0,
+          "adr": 134.4,
+          "hs": 28.0,
+          "rnd": 1045.0
+        },
+        "tagline": "Controller"
+      },
+      {
+        "id": "7378",
+        "alias": "Jinggg",
+        "real": "Wang Jing Jie",
+        "avatar": "https://owcdn.net/img/69735f0889a6b.png",
+        "url": "https://www.vlr.gg/player/7378/jinggg",
+        "stats": {
+          "rating": 1.11,
+          "acs": 227.8,
+          "kd": 1.17,
+          "kast": 76.0,
+          "adr": 148.7,
+          "hs": 25.0,
+          "rnd": 1045.0
+        },
+        "tagline": "Duelist · Top Frag"
+      },
+      {
+        "id": "9801",
+        "alias": "f0rsakeN",
+        "real": "Jason Susanto",
+        "avatar": "https://owcdn.net/img/69735f135cf21.png",
+        "url": "https://www.vlr.gg/player/9801/f0rsaken",
+        "stats": {
+          "rating": 1.0,
+          "acs": 208.2,
+          "kd": 1.03,
+          "kast": 74.0,
+          "adr": 136.4,
+          "hs": 26.0,
+          "rnd": 1045.0
+        },
+        "tagline": "Flex · IGL"
+      },
+      {
+        "id": "9803",
+        "alias": "d4v41",
+        "real": "Khalish Rusyaidee",
+        "avatar": "https://owcdn.net/img/69735f207c9bf.png",
+        "url": "https://www.vlr.gg/player/9803/d4v41",
+        "stats": {
+          "rating": 1.04,
+          "acs": 203.8,
+          "kd": 1.12,
+          "kast": 71.0,
+          "adr": 137.1,
+          "hs": 28.0,
+          "rnd": 1045.0
+        },
+        "tagline": "Sentinel · Anchor"
+      },
+      {
+        "id": "17086",
+        "alias": "something",
+        "real": "Ilya Petrov",
+        "avatar": "https://owcdn.net/img/69735f396861f.png",
+        "url": "https://www.vlr.gg/player/17086/something",
+        "stats": {
+          "rating": 1.13,
+          "acs": 217.7,
+          "kd": 1.25,
+          "kast": 72.0,
+          "adr": 140.8,
+          "hs": 25.0,
+          "rnd": 1045.0
+        },
+        "tagline": "Secondary Duelist"
+      }
+    ]
+  }
+]
