@@ -10,6 +10,7 @@ export type ProPlayer = {
   url: string;
   tagline: string;
   stats: Record<StatKey | "rnd", number>;
+  avatarUrl?: string;
 };
 
 export type ProTeam = {
@@ -20,6 +21,7 @@ export type ProTeam = {
   color: string;
   accent: string;
   players: ProPlayer[];
+  logoUrl?: string;
 };
 
 export const TEAMS = rawData as unknown as ProTeam[];

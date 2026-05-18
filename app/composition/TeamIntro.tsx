@@ -65,7 +65,7 @@ export function TeamIntro({ team }: { readonly team: ProTeam }) {
         {team.tag}
       </div>
       <Img
-        src={staticFile(`vlr/logos/${team.tag}.png`)}
+        src={team.logoUrl ?? staticFile(`vlr/logos/${team.tag}.png`)}
         style={{
           position: "absolute",
           right: -140,
@@ -81,7 +81,7 @@ export function TeamIntro({ team }: { readonly team: ProTeam }) {
 
       <div style={{ display: "flex", alignItems: "center", gap: 28, opacity: headerOpacity, transform: `translateY(${headerY}px)`, position: "relative", zIndex: 3 }}>
         <Img
-          src={staticFile(`vlr/logos/${team.tag}.png`)}
+          src={team.logoUrl ?? staticFile(`vlr/logos/${team.tag}.png`)}
           style={{
             width: 130,
             height: 130,
@@ -135,7 +135,7 @@ export function TeamIntro({ team }: { readonly team: ProTeam }) {
                 }}
               >
                 <Img
-                  src={staticFile(`vlr/avatars/${team.tag}-${p.alias}.png`)}
+                  src={p.avatarUrl ?? staticFile(`vlr/avatars/${team.tag}-${p.alias}.png`)}
                   style={{
                     width: 56,
                     height: 56,

@@ -84,7 +84,7 @@ export function PlayerCard({
       </div>
       {/* logo watermark right */}
       <Img
-        src={staticFile(`${assetPrefix}/logos/${team.tag}.png`)}
+        src={team.logoUrl ?? staticFile(`${assetPrefix}/logos/${team.tag}.png`)}
         style={{
           position: "absolute",
           right: -150,
@@ -100,7 +100,7 @@ export function PlayerCard({
 
       {/* header */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, opacity: headerOpacity, transform: `translateY(${headerY}px)`, position: "relative", zIndex: 3 }}>
-        <Img src={staticFile(`${assetPrefix}/logos/${team.tag}.png`)} style={{ width: 44, height: 44, objectFit: "contain", filter: `drop-shadow(0 0 8px ${team.color})` }} />
+        <Img src={team.logoUrl ?? staticFile(`${assetPrefix}/logos/${team.tag}.png`)} style={{ width: 44, height: 44, objectFit: "contain", filter: `drop-shadow(0 0 8px ${team.color})` }} />
         <div style={{ fontSize: 16, fontWeight: 900, color: "white", letterSpacing: 1 }}>{team.name.toUpperCase()}</div>
         <div style={{ width: 1, height: 22, background: "#2A2D3D" }} />
         <div style={{ fontSize: 11, color: "#6B7280", fontWeight: 800, letterSpacing: 3 }}>
@@ -150,7 +150,7 @@ export function PlayerCard({
               }}
             />
             <Img
-              src={staticFile(`${assetPrefix}/avatars/${team.tag}-${player.alias}.png`)}
+              src={player.avatarUrl ?? staticFile(`${assetPrefix}/avatars/${team.tag}-${player.alias}.png`)}
               style={{
                 position: "relative",
                 width: 240,

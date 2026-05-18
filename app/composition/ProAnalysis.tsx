@@ -115,7 +115,7 @@ function TitleCard({ teams }: { teams: ProTeam[] }) {
       <div style={{ display: "flex", gap: 64, opacity: subOpacity, alignItems: "center" }}>
         {teams.map((team) => (
           <div key={team.tag} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-            <Img src={staticFile(`vlr/logos/${team.tag}.png`)} style={{ width: 88, height: 88, objectFit: "contain", filter: `drop-shadow(0 0 14px ${team.color})` }} />
+            <Img src={team.logoUrl ?? staticFile(`vlr/logos/${team.tag}.png`)} style={{ width: 88, height: 88, objectFit: "contain", filter: `drop-shadow(0 0 14px ${team.color})` }} />
             <div style={{ fontSize: 16, fontWeight: 900, color: team.color, letterSpacing: 3, textShadow: `0 0 10px ${team.color}` }}>{team.tag}</div>
             <div style={{ fontSize: 11, color: "#6B7280", fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>{team.region}</div>
           </div>
@@ -248,7 +248,7 @@ function FinalCompare({ teams }: { teams: ProTeam[] }) {
                   backdropFilter: "blur(10px)",
                 }}
               >
-                <Img src={staticFile(`vlr/avatars/${team.tag}-${player.alias}.png`)} style={{ width: 80, height: 80, objectFit: "cover", clipPath: "polygon(0 0, 88% 0, 100% 14%, 100% 100%, 12% 100%, 0 86%)", border: `2px solid ${team.color}` }} />
+                <Img src={player.avatarUrl ?? staticFile(`vlr/avatars/${team.tag}-${player.alias}.png`)} style={{ width: 80, height: 80, objectFit: "cover", clipPath: "polygon(0 0, 88% 0, 100% 14%, 100% 100%, 12% 100%, 0 86%)", border: `2px solid ${team.color}` }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
                     <div style={{ fontSize: 28, fontWeight: 900, color: "white", letterSpacing: -0.5, textTransform: "uppercase", textShadow: `0 0 12px ${team.color}` }}>{player.alias}</div>

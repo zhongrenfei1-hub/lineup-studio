@@ -2,6 +2,16 @@
 
 import { useState } from "react";
 import { ProTeam, ProPlayer, StatKey, STAT_AXES } from "../composition/data";
+import { staticFile } from "../composition/lib";
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 type Props = {
   teams: ProTeam[];
@@ -88,6 +98,13 @@ export function EditorPanel({ teams, onChange }: Props) {
             />
             <span className="text-xs text-zinc-400 font-mono">{team.color}</span>
           </div>
+          <AssetUpload
+            label="队标"
+            src={team.logoUrl ?? staticFile(`vlr/logos/${team.tag}.png`)}
+            onPick={async (file) => updateTeam({ logoUrl: await fileToDataUrl(file) })}
+            onReset={() => updateTeam({ logoUrl: undefined })}
+            isCustom={!!team.logoUrl}
+          />
         </div>
 
         <div className="space-y-2">
@@ -111,6 +128,13 @@ export function EditorPanel({ teams, onChange }: Props) {
 
         <div className="space-y-2">
           <Label>{player.alias} · 资料</Label>
+          <AssetUpload
+            label="头像 · 上传朋友照片"
+            src={player.avatarUrl ?? staticFile(`vlr/avatars/${team.tag}-${player.alias}.png`)}
+            onPick={async (file) => updatePlayer({ avatarUrl: await fileToDataUrl(file) })}
+            onReset={() => updatePlayer({ avatarUrl: undefined })}
+            isCustom={!!player.avatarUrl}
+          />
           <div className="grid grid-cols-1 gap-2">
             <FieldInput
               label="Alias (显示名)"
@@ -144,6 +168,57 @@ export function EditorPanel({ teams, onChange }: Props) {
               onChange={(v) => updateStat(ax.key, v)}
             />
           ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AssetUpload({
+  label,
+  src,
+  onPick,
+  onReset,
+  isCustom,
+}: {
+  label: string;
+  src: string;
+  onPick: (f: File) => Promise<void>;
+  onReset: () => void;
+  isCustom: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 mt-2">
+      <div className="relative w-14 h-14 rounded border border-zinc-700 overflow-hidden bg-zinc-900 flex items-center justify-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt="preview" className="w-full h-full object-cover" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">
+          {label}
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <label className="cursor-pointer text-xs bg-purple-500 hover:bg-purple-400 text-[#08080F] px-3 py-1.5 rounded font-bold tracking-wide">
+            选图
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void onPick(f);
+                e.target.value = "";
+              }}
+            />
+          </label>
+          {isCustom && (
+            <button
+              onClick={onReset}
+              className="text-[10px] text-zinc-500 hover:text-zinc-300 uppercase tracking-widest font-bold"
+            >
+              ↺ 默认
+            </button>
+          )}
         </div>
       </div>
     </div>
