@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { AbsoluteFill, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { TEAMS, STAT_AXES, teamMVP, normalize, ProTeam, ProPlayer } from "./data";
 import { TeamIntro } from "./TeamIntro";
@@ -17,12 +18,12 @@ type Seg =
   | { kind: "title"; dur: number }
   | { kind: "intro"; team: ProTeam; dur: number }
   | { kind: "player"; team: ProTeam; player: ProPlayer; isMvp: boolean; idx: number; dur: number }
-  | { kind: "final"; dur: number };
+  | { kind: "final"; teams: ProTeam[]; dur: number };
 
-function buildSegments(): Seg[] {
+function buildSegments(teams: ProTeam[]): Seg[] {
   const segs: Seg[] = [];
   segs.push({ kind: "title", dur: TITLE_F });
-  for (const team of TEAMS) {
+  for (const team of teams) {
     segs.push({ kind: "intro", team, dur: INTRO_F });
     const mvp = teamMVP(team);
     const ordered = [mvp, ...team.players.filter((p) => p.id !== mvp.id)];
@@ -37,29 +38,29 @@ function buildSegments(): Seg[] {
       });
     });
   }
-  segs.push({ kind: "final", dur: FINAL_F });
+  segs.push({ kind: "final", teams, dur: FINAL_F });
   return segs;
 }
 
-const SEGMENTS = buildSegments();
-export const PRO_TOTAL_FRAMES = SEGMENTS.reduce((s, x) => s + x.dur, 0);
+export const PRO_TOTAL_FRAMES = buildSegments(TEAMS).reduce((s, x) => s + x.dur, 0);
 
-export function ProAnalysis() {
+export function ProAnalysis({ teams = TEAMS }: { teams?: ProTeam[] }) {
+  const segments = useMemo(() => buildSegments(teams), [teams]);
   let cursor = 0;
   return (
     <AbsoluteFill style={{ backgroundColor: "#08080F", fontFamily: FONT }}>
-      {SEGMENTS.map((seg, i) => {
+      {segments.map((seg, i) => {
         const from = cursor;
         cursor += seg.dur;
         const isFirst = i === 0;
-        const isLast = i === SEGMENTS.length - 1;
+        const isLast = i === segments.length - 1;
         const fadeIn = isFirst ? 0 : OVERLAP;
         const fadeOut = isLast ? 0 : OVERLAP;
         const seqDur = seg.dur + (isLast ? 0 : OVERLAP);
         return (
           <Sequence key={i} from={from} durationInFrames={seqDur} layout="none">
             <FadeWrap fadeIn={fadeIn} fadeOut={fadeOut} totalDur={seqDur}>
-              {renderSegment(seg)}
+              {renderSegment(seg, teams)}
             </FadeWrap>
           </Sequence>
         );
@@ -68,14 +69,14 @@ export function ProAnalysis() {
   );
 }
 
-function renderSegment(seg: Seg) {
-  if (seg.kind === "title") return <TitleCard />;
+function renderSegment(seg: Seg, allTeams: ProTeam[]) {
+  if (seg.kind === "title") return <TitleCard teams={allTeams} />;
   if (seg.kind === "intro") return <TeamIntro team={seg.team} />;
   if (seg.kind === "player") return <PlayerCard player={seg.player} team={seg.team} indexInTeam={seg.idx} isMvp={seg.isMvp} />;
-  return <FinalCompare />;
+  return <FinalCompare teams={seg.teams} />;
 }
 
-function TitleCard() {
+function TitleCard({ teams }: { teams: ProTeam[] }) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const titleProgress = spring({ frame, fps, config: { damping: 24, mass: 1, stiffness: 90, overshootClamping: true } });
@@ -108,10 +109,10 @@ function TitleCard() {
           textShadow: "0 0 40px rgba(168,85,247,0.5)",
         }}
       >
-        {TEAMS.map((t) => t.tag).join(" · ")}
+        {teams.map((t) => t.tag).join(" · ")}
       </div>
       <div style={{ display: "flex", gap: 64, opacity: subOpacity, alignItems: "center" }}>
-        {TEAMS.map((team) => (
+        {teams.map((team) => (
           <div key={team.tag} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
             <Img src={staticFile(`vlr/logos/${team.tag}.png`)} style={{ width: 88, height: 88, objectFit: "contain", filter: `drop-shadow(0 0 14px ${team.color})` }} />
             <div style={{ fontSize: 16, fontWeight: 900, color: team.color, letterSpacing: 3, textShadow: `0 0 10px ${team.color}` }}>{team.tag}</div>
@@ -126,7 +127,7 @@ function TitleCard() {
   );
 }
 
-function FinalCompare() {
+function FinalCompare({ teams }: { teams: ProTeam[] }) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -141,7 +142,7 @@ function FinalCompare() {
   const point = (i: number, r: number) =>
     [cx + r * Math.cos(angle(i)), cy + r * Math.sin(angle(i))] as const;
 
-  const mvps = TEAMS.map((t) => ({ team: t, player: teamMVP(t) }));
+  const mvps = teams.map((t) => ({ team: t, player: teamMVP(t) }));
 
   return (
     <AbsoluteFill style={{ padding: 60, display: "flex", flexDirection: "column", gap: 24, background: "radial-gradient(ellipse at center, #1A0B2A 0%, #08080F 70%)", color: "white" }}>
@@ -166,7 +167,7 @@ function FinalCompare() {
         <div style={{ flex: "0 0 auto", width: size, height: size, position: "relative" }}>
           <svg width={size} height={size}>
             <defs>
-              {TEAMS.map((t) => (
+              {teams.map((t) => (
                 <filter key={t.tag} id={`glow-final-${t.tag}`} x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur stdDeviation="6" />
                   <feMerge>

@@ -1,4 +1,4 @@
-import { PreviewPlayer } from "./components/PreviewPlayer";
+import { StudioWorkspace } from "./components/StudioWorkspace";
 
 export default function Home() {
   return (
@@ -71,11 +71,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-10 max-w-6xl mx-auto px-8 pb-20">
-        <div className="text-center text-xs tracking-[6px] font-black text-zinc-500 mb-4 uppercase">
-          ↓ Live Preview · EDG vs PRX Demo · 6 stats axes · 74 seconds
-        </div>
-        <PreviewPlayer />
+      <section className="relative z-10 max-w-7xl mx-auto px-8 pb-20">
+        <StudioWorkspace />
       </section>
 
       <section id="features" className="relative z-10 max-w-6xl mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-3 gap-6">
