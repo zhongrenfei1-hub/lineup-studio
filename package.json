@@ -9,10 +9,12 @@
     "deploy": "next build && touch out/.nojekyll && cd out && git init -b gh-pages -q && git add -A && git -c user.email='zhongrenfei1@users.noreply.github.com' -c user.name='zhongrenfei1-hub' commit -m 'deploy' -q && git remote add origin https://github.com/zhongrenfei1-hub/lineup-studio.git 2>/dev/null; git push -f origin gh-pages && cd .. && rm -rf out/.git"
   },
   "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
     "@remotion/player": "^4.0.462",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-easy-crop": "^5.5.7",
     "remotion": "^4.0.462"
   },
   "devDependencies": {

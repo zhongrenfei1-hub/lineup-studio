@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ProTeam, ProPlayer, StatKey, STAT_AXES } from "../composition/data";
 import { staticFile } from "../composition/lib";
+import { ImageEditorModal } from "./ImageEditorModal";
 
 function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -13,6 +14,12 @@ function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
+type PendingEdit = {
+  src: string;
+  aspect: number;
+  apply: (dataUrl: string) => void;
+} | null;
+
 type Props = {
   teams: ProTeam[];
   onChange: (teams: ProTeam[]) => void;
@@ -21,6 +28,7 @@ type Props = {
 export function EditorPanel({ teams, onChange }: Props) {
   const [activeTeam, setActiveTeam] = useState(0);
   const [activePlayer, setActivePlayer] = useState(0);
+  const [pending, setPending] = useState<PendingEdit>(null);
 
   const team = teams[activeTeam];
   const player = team.players[activePlayer];
@@ -101,7 +109,14 @@ export function EditorPanel({ teams, onChange }: Props) {
           <AssetUpload
             label="队标"
             src={team.logoUrl ?? staticFile(`vlr/logos/${team.tag}.png`)}
-            onPick={async (file) => updateTeam({ logoUrl: await fileToDataUrl(file) })}
+            onPick={async (file) => {
+              const src = await fileToDataUrl(file);
+              setPending({
+                src,
+                aspect: 1,
+                apply: (dataUrl) => updateTeam({ logoUrl: dataUrl }),
+              });
+            }}
             onReset={() => updateTeam({ logoUrl: undefined })}
             isCustom={!!team.logoUrl}
           />
@@ -129,9 +144,16 @@ export function EditorPanel({ teams, onChange }: Props) {
         <div className="space-y-2">
           <Label>{player.alias} · 资料</Label>
           <AssetUpload
-            label="头像 · 上传朋友照片"
+            label="头像 · 上传朋友照片 · 自带裁剪 + 一键去背景"
             src={player.avatarUrl ?? staticFile(`vlr/avatars/${team.tag}-${player.alias}.png`)}
-            onPick={async (file) => updatePlayer({ avatarUrl: await fileToDataUrl(file) })}
+            onPick={async (file) => {
+              const src = await fileToDataUrl(file);
+              setPending({
+                src,
+                aspect: 1,
+                apply: (dataUrl) => updatePlayer({ avatarUrl: dataUrl }),
+              });
+            }}
             onReset={() => updatePlayer({ avatarUrl: undefined })}
             isCustom={!!player.avatarUrl}
           />
@@ -170,6 +192,17 @@ export function EditorPanel({ teams, onChange }: Props) {
           ))}
         </div>
       </div>
+      {pending && (
+        <ImageEditorModal
+          src={pending.src}
+          aspect={pending.aspect}
+          onCancel={() => setPending(null)}
+          onConfirm={(dataUrl) => {
+            pending.apply(dataUrl);
+            setPending(null);
+          }}
+        />
+      )}
     </div>
   );
 }

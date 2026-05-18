@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PreviewPlayer } from "./PreviewPlayer";
 import { EditorPanel } from "./EditorPanel";
+import { TemplateLibrary } from "./TemplateLibrary";
 import { TEAMS, ProTeam } from "../composition/data";
 
 export function StudioWorkspace() {
@@ -28,8 +29,11 @@ export function StudioWorkspace() {
         </div>
         <PreviewPlayer teams={teams} />
       </div>
-      <div className="lg:sticky lg:top-6 h-[680px]">
-        <EditorPanel teams={teams} onChange={setTeams} />
+      <div className="lg:sticky lg:top-6 space-y-3">
+        <TemplateLibrary onPick={setTeams} />
+        <div className="h-[680px]">
+          <EditorPanel teams={teams} onChange={setTeams} />
+        </div>
       </div>
     </div>
   );
