@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { AbsoluteFill, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, interpolate, Sequence, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { staticFile } from "./lib";
 import { TEAMS, STAT_AXES, teamMVP, normalize, ProTeam, ProPlayer } from "./data";
 import { TeamIntro } from "./TeamIntro";
 import { PlayerCard } from "./PlayerCard";

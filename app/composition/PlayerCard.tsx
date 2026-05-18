@@ -1,4 +1,5 @@
-import { Easing, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { Easing, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { staticFile } from "./lib";
 import { ProPlayer, ProTeam, STAT_AXES, normalize } from "./data";
 import { RadarMini } from "./RadarMini";
 
