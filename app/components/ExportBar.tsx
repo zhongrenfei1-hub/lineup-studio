@@ -3,12 +3,15 @@
 import { useState, RefObject } from "react";
 import type { PlayerRef } from "@remotion/player";
 import { toPng } from "html-to-image";
+import { ProTeam } from "../composition/data";
 
 type Props = {
   playerRef: RefObject<PlayerRef | null>;
+  teams: ProTeam[];
+  onImport: (teams: ProTeam[]) => void;
 };
 
-export function ExportBar({ playerRef }: Props) {
+export function ExportBar({ playerRef, teams, onImport }: Props) {
   const [working, setWorking] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [waitlistEmail, setWaitlistEmail] = useState("");
@@ -45,6 +48,36 @@ export function ExportBar({ playerRef }: Props) {
     }
   }
 
+  function exportProject() {
+    const blob = new Blob([JSON.stringify({ version: 1, teams }, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const ts = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    a.download = `lineup-studio-project-${ts}.json`;
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
+    setMessage("✓ 项目 JSON 已下载");
+  }
+
+  async function importProject(file: File) {
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (Array.isArray(data.teams) && data.teams.length >= 1) {
+        onImport(data.teams);
+        setMessage(`✓ 已导入 ${data.teams.length} 队`);
+      } else {
+        setMessage("✗ JSON 格式不对");
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setMessage(`✗ ${msg.slice(0, 60)}`);
+    }
+  }
+
   function submitWaitlist(e: React.FormEvent) {
     e.preventDefault();
     // MVP: 存 localStorage,后期接 Tally / Formspree
@@ -64,14 +97,35 @@ export function ExportBar({ playerRef }: Props) {
       <div className="text-[10px] tracking-[3px] font-black text-purple-400 uppercase">
         Export
       </div>
-      <div className="flex gap-2">
+      <div className="grid grid-cols-1 gap-2">
         <button
           onClick={exportCurrentFrame}
           disabled={working}
-          className="flex-1 bg-purple-500 hover:bg-purple-400 disabled:opacity-50 text-[#08080F] text-sm font-black tracking-wide px-4 py-2.5 rounded-lg transition"
+          className="bg-purple-500 hover:bg-purple-400 disabled:opacity-50 text-[#08080F] text-sm font-black tracking-wide px-4 py-2.5 rounded-lg transition"
         >
           {working ? "导出中…" : "📸 下载当前帧 PNG"}
         </button>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={exportProject}
+            className="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-black tracking-wide px-3 py-2 rounded transition"
+          >
+            💾 导出项目
+          </button>
+          <label className="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-black tracking-wide px-3 py-2 rounded transition cursor-pointer text-center">
+            📥 导入项目
+            <input
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void importProject(f);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        </div>
       </div>
       <form onSubmit={submitWaitlist} className="space-y-2">
         <div className="text-xs text-zinc-400 leading-relaxed">

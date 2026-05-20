@@ -113,7 +113,7 @@ export function StudioWorkspace() {
             orientation={orientation}
           />
         </div>
-        <ExportBar playerRef={playerRef} />
+        <ExportBar playerRef={playerRef} teams={teams} onImport={setTeams} />
       </div>
       <div className="lg:sticky lg:top-6 space-y-3">
         <TemplateLibrary onPick={setTeams} />
