@@ -1,12 +1,17 @@
 "use client";
 
 import { Player, PlayerRef } from "@remotion/player";
-import { useMemo, useRef } from "react";
+import { Ref, useMemo } from "react";
 import { ProAnalysis, PRO_TOTAL_FRAMES } from "../composition/ProAnalysis";
 import { ProTeam } from "../composition/data";
 
-export function PreviewPlayer({ teams }: { teams?: ProTeam[] }) {
-  const playerRef = useRef<PlayerRef>(null);
+export function PreviewPlayer({
+  teams,
+  playerRef,
+}: {
+  teams?: ProTeam[];
+  playerRef?: Ref<PlayerRef>;
+}) {
   const inputProps = useMemo(() => ({ teams }), [teams]);
 
   return (

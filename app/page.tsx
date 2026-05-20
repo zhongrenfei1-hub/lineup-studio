@@ -1,4 +1,5 @@
 import { StudioWorkspace } from "./components/StudioWorkspace";
+import { WaitlistForm } from "./components/WaitlistForm";
 
 export default function Home() {
   return (
@@ -132,8 +133,16 @@ export default function Home() {
         <p className="text-zinc-400 mb-8">
           MVP 上线时第一批通知 · 包含 50% 永久折扣 · 限前 200 名
         </p>
-        <p className="text-zinc-500 text-sm">
-          (等候表单接好邮件后开放,先 Star GitHub 跟进进度)
+        <WaitlistForm />
+        <p className="text-zinc-600 text-xs mt-6">
+          点击按钮会用你的邮件客户端发到候补地址 · 也可以 ⭐ Star{" "}
+          <a
+            href="https://github.com/zhongrenfei1-hub/lineup-studio"
+            className="text-purple-400 hover:underline"
+          >
+            GitHub
+          </a>{" "}
+          跟进进度
         </p>
       </section>
 
