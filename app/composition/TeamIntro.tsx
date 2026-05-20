@@ -15,7 +15,8 @@ function hexToRgba(hex: string, alpha: number) {
 
 export function TeamIntro({ team }: { readonly team: ProTeam }) {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const isPortrait = height > width;
 
   const headerOpacity = interpolate(frame, [0, fps * 0.4], [0, 1], { extrapolateRight: "clamp" });
   const headerY = interpolate(frame, [0, fps * 0.5], [16, 0], { extrapolateRight: "clamp" });
@@ -96,7 +97,7 @@ export function TeamIntro({ team }: { readonly team: ProTeam }) {
           </div>
           <div
             style={{
-              fontSize: 76,
+              fontSize: isPortrait ? 56 : 76,
               fontWeight: 900,
               color: "white",
               lineHeight: 0.95,
@@ -113,7 +114,7 @@ export function TeamIntro({ team }: { readonly team: ProTeam }) {
         </div>
       </div>
 
-      <div style={{ display: "flex", flex: 1, gap: 40, alignItems: "stretch", position: "relative", zIndex: 2 }}>
+      <div style={{ display: "flex", flex: 1, gap: isPortrait ? 18 : 40, alignItems: "stretch", flexDirection: isPortrait ? "column" : "row", position: "relative", zIndex: 2 }}>
         <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", gap: 12, justifyContent: "center" }}>
           {team.players.map((p, idx) => {
             const delay = 6 + idx * 4;

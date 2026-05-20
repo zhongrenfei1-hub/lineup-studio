@@ -40,6 +40,8 @@ export function PlayerCard({
 
   const numberSpring = spring({ frame: frame - 4, fps, config: { damping: 24, mass: 1, stiffness: 90, overshootClamping: true } });
   const aliasOffset = interpolate(numberSpring, [0, 1], [40, 0]);
+  const { width, height } = useVideoConfig();
+  const isPortrait = height > width;
 
   return (
     <div
@@ -130,9 +132,9 @@ export function PlayerCard({
       </div>
 
       {/* main grid */}
-      <div style={{ display: "flex", flex: 1, gap: 44, alignItems: "center", position: "relative", zIndex: 2 }}>
+      <div style={{ display: "flex", flex: 1, gap: isPortrait ? 24 : 44, alignItems: "center", flexDirection: isPortrait ? "column" : "row", position: "relative", zIndex: 2 }}>
         {/* portrait + identity */}
-        <div style={{ display: "flex", flexDirection: "column", flex: "0 0 300px", gap: 22 }}>
+        <div style={{ display: "flex", flexDirection: "column", flex: isPortrait ? "0 0 auto" : "0 0 300px", gap: isPortrait ? 14 : 22, alignItems: isPortrait ? "center" : "flex-start" }}>
           <div
             style={{
               position: "relative",
@@ -177,10 +179,10 @@ export function PlayerCard({
               {player.stats.rnd} RND
             </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", transform: `translateY(${aliasOffset}px)`, opacity: numberSpring }}>
+          <div style={{ display: "flex", flexDirection: "column", transform: `translateY(${aliasOffset}px)`, opacity: numberSpring, alignItems: isPortrait ? "center" : "flex-start", textAlign: isPortrait ? "center" : "left" }}>
             <div
               style={{
-                fontSize: 56,
+                fontSize: isPortrait ? 72 : 56,
                 fontWeight: 900,
                 color: "white",
                 lineHeight: 0.95,
@@ -216,11 +218,11 @@ export function PlayerCard({
 
         {/* radar */}
         <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <RadarMini stats={player.stats} color={team.color} size={420} delay={8} />
+          <RadarMini stats={player.stats} color={team.color} size={isPortrait ? 360 : 420} delay={8} />
         </div>
 
         {/* data bars */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12, minWidth: 0 }}>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12, minWidth: 0, width: isPortrait ? "100%" : undefined }}>
           {STAT_AXES.map((ax, idx) => {
             const delay = 12 + idx * 4;
             const op = interpolate(frame, [delay, delay + fps * 0.4], [0, 1], { extrapolateRight: "clamp" });

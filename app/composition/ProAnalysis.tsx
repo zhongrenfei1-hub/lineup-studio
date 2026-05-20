@@ -79,7 +79,8 @@ function renderSegment(seg: Seg, allTeams: ProTeam[]) {
 
 function TitleCard({ teams }: { teams: ProTeam[] }) {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const isPortrait = height > width;
   const titleProgress = spring({ frame, fps, config: { damping: 24, mass: 1, stiffness: 90, overshootClamping: true } });
   const subOpacity = interpolate(frame, [fps * 0.4, fps * 1.1], [0, 1], { extrapolateRight: "clamp" });
 
@@ -98,7 +99,7 @@ function TitleCard({ teams }: { teams: ProTeam[] }) {
       </div>
       <div
         style={{
-          fontSize: 96,
+          fontSize: isPortrait ? 72 : 96,
           fontWeight: 900,
           color: "white",
           letterSpacing: -3,
@@ -130,7 +131,8 @@ function TitleCard({ teams }: { teams: ProTeam[] }) {
 
 function FinalCompare({ teams }: { teams: ProTeam[] }) {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const isPortrait = height > width;
 
   const headerOpacity = interpolate(frame, [0, fps * 0.4], [0, 1], { extrapolateRight: "clamp" });
 
@@ -164,7 +166,7 @@ function FinalCompare({ teams }: { teams: ProTeam[] }) {
         </div>
       </div>
 
-      <div style={{ display: "flex", flex: 1, gap: 40, alignItems: "center", position: "relative", zIndex: 2 }}>
+      <div style={{ display: "flex", flex: 1, gap: isPortrait ? 18 : 40, alignItems: "center", flexDirection: isPortrait ? "column" : "row", position: "relative", zIndex: 2 }}>
         <div style={{ flex: "0 0 auto", width: size, height: size, position: "relative" }}>
           <svg width={size} height={size}>
             <defs>
