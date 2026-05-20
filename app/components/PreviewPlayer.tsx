@@ -2,22 +2,28 @@
 
 import { Player, PlayerRef } from "@remotion/player";
 import { Ref, useMemo } from "react";
-import { ProAnalysis, PRO_TOTAL_FRAMES } from "../composition/ProAnalysis";
-import { ProTeam } from "../composition/data";
+import { ProAnalysis, computeTotalFrames, DEFAULT_TIMING, Timing } from "../composition/ProAnalysis";
+import { ProTeam, TEAMS } from "../composition/data";
 
 export function PreviewPlayer({
   teams,
   playerRef,
   orientation = "landscape",
+  timing = DEFAULT_TIMING,
 }: {
   teams?: ProTeam[];
   playerRef?: Ref<PlayerRef>;
   orientation?: "landscape" | "portrait";
+  timing?: Timing;
 }) {
   const isPortrait = orientation === "portrait";
   const inputProps = useMemo(
-    () => ({ teams, orientation }),
-    [teams, orientation],
+    () => ({ teams, timing }),
+    [teams, timing],
+  );
+  const totalFrames = useMemo(
+    () => computeTotalFrames(teams ?? TEAMS, timing),
+    [teams, timing],
   );
 
   return (
@@ -25,7 +31,7 @@ export function PreviewPlayer({
       ref={playerRef}
       component={ProAnalysis}
       inputProps={inputProps}
-      durationInFrames={PRO_TOTAL_FRAMES}
+      durationInFrames={totalFrames}
       fps={30}
       compositionWidth={isPortrait ? 720 : 1280}
       compositionHeight={isPortrait ? 1280 : 720}

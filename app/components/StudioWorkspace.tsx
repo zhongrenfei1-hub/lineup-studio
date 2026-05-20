@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { PlayerRef } from "@remotion/player";
+import { TIMING_PRESETS, DEFAULT_TIMING, Timing } from "../composition/ProAnalysis";
 import { PreviewPlayer } from "./PreviewPlayer";
 import { EditorPanel } from "./EditorPanel";
 import { TemplateLibrary } from "./TemplateLibrary";
@@ -17,6 +18,8 @@ export function StudioWorkspace() {
   const [teams, setTeams] = useState<ProTeam[]>(TEAMS);
   const [hydrated, setHydrated] = useState(false);
   const [orientation, setOrientation] = useState<Orientation>("landscape");
+  const [timingKey, setTimingKey] = useState<keyof typeof TIMING_PRESETS>("standard");
+  const timing: Timing = TIMING_PRESETS[timingKey]?.timing ?? DEFAULT_TIMING;
   const playerRef = useRef<PlayerRef>(null);
 
   // 加载持久化数据(仅首次,URL hash 优先于 localStorage)
@@ -109,7 +112,16 @@ export function StudioWorkspace() {
           <div className="text-[10px] tracking-[4px] font-black text-zinc-500 uppercase">
             ↓ Live Preview · 实时同步右侧编辑
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <select
+              value={timingKey}
+              onChange={(e) => setTimingKey(e.target.value as keyof typeof TIMING_PRESETS)}
+              className="bg-zinc-900 border border-zinc-800 text-xs font-bold text-zinc-300 px-2.5 py-1.5 rounded focus:outline-none focus:border-purple-500 uppercase tracking-widest"
+            >
+              {Object.entries(TIMING_PRESETS).map(([k, p]) => (
+                <option key={k} value={k}>{p.label}</option>
+              ))}
+            </select>
             <div className="flex bg-zinc-900 rounded-md p-0.5 text-xs font-black tracking-widest uppercase">
               <button
                 onClick={() => setOrientation("landscape")}
@@ -154,6 +166,7 @@ export function StudioWorkspace() {
             teams={teams}
             playerRef={playerRef}
             orientation={orientation}
+            timing={timing}
           />
         </div>
         <ExportBar playerRef={playerRef} teams={teams} onImport={setTeams} />

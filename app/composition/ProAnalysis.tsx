@@ -8,12 +8,22 @@ import { FadeWrap } from "./FadeWrap";
 
 const FONT = "ui-sans-serif, -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif";
 
-const TITLE_F = 90;
-const INTRO_F = 130;
-const MVP_F = 230;
-const SUB_F = 140;
-const FINAL_F = 280;
-const OVERLAP = 30;
+export type Timing = {
+  title: number;
+  intro: number;
+  mvp: number;
+  sub: number;
+  final: number;
+  overlap: number;
+};
+
+export const TIMING_PRESETS: Record<string, { label: string; timing: Timing }> = {
+  short:    { label: "快版 · 32s", timing: { title: 60, intro: 90,  mvp: 150, sub: 90,  final: 180, overlap: 24 } },
+  standard: { label: "标准 · 74s", timing: { title: 90, intro: 130, mvp: 230, sub: 140, final: 280, overlap: 30 } },
+  long:     { label: "完整 · 120s", timing: { title: 120, intro: 180, mvp: 320, sub: 180, final: 380, overlap: 36 } },
+};
+
+export const DEFAULT_TIMING = TIMING_PRESETS.standard.timing;
 
 type Seg =
   | { kind: "title"; dur: number }
@@ -21,11 +31,11 @@ type Seg =
   | { kind: "player"; team: ProTeam; player: ProPlayer; isMvp: boolean; idx: number; dur: number }
   | { kind: "final"; teams: ProTeam[]; dur: number };
 
-function buildSegments(teams: ProTeam[]): Seg[] {
+function buildSegments(teams: ProTeam[], t: Timing): Seg[] {
   const segs: Seg[] = [];
-  segs.push({ kind: "title", dur: TITLE_F });
+  segs.push({ kind: "title", dur: t.title });
   for (const team of teams) {
-    segs.push({ kind: "intro", team, dur: INTRO_F });
+    segs.push({ kind: "intro", team, dur: t.intro });
     const mvp = teamMVP(team);
     const ordered = [mvp, ...team.players.filter((p) => p.id !== mvp.id)];
     ordered.forEach((p, i) => {
@@ -35,18 +45,29 @@ function buildSegments(teams: ProTeam[]): Seg[] {
         player: p,
         isMvp: i === 0,
         idx: i,
-        dur: i === 0 ? MVP_F : SUB_F,
+        dur: i === 0 ? t.mvp : t.sub,
       });
     });
   }
-  segs.push({ kind: "final", teams, dur: FINAL_F });
+  segs.push({ kind: "final", teams, dur: t.final });
   return segs;
 }
 
-export const PRO_TOTAL_FRAMES = buildSegments(TEAMS).reduce((s, x) => s + x.dur, 0);
+export function computeTotalFrames(teams: ProTeam[], t: Timing = DEFAULT_TIMING) {
+  return buildSegments(teams, t).reduce((s, x) => s + x.dur, 0);
+}
 
-export function ProAnalysis({ teams = TEAMS }: { teams?: ProTeam[] }) {
-  const segments = useMemo(() => buildSegments(teams), [teams]);
+export const PRO_TOTAL_FRAMES = computeTotalFrames(TEAMS, DEFAULT_TIMING);
+
+export function ProAnalysis({
+  teams = TEAMS,
+  timing = DEFAULT_TIMING,
+}: {
+  teams?: ProTeam[];
+  timing?: Timing;
+}) {
+  const segments = useMemo(() => buildSegments(teams, timing), [teams, timing]);
+  const OVERLAP = timing.overlap;
   let cursor = 0;
   return (
     <AbsoluteFill style={{ backgroundColor: "#08080F", fontFamily: FONT }}>
