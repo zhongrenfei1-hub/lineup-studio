@@ -62,6 +62,23 @@ export function ExportBar({ playerRef, teams, onImport }: Props) {
     setMessage("✓ 项目 JSON 已下载");
   }
 
+  async function shareUrl() {
+    try {
+      const json = JSON.stringify({ version: 1, teams });
+      const encoded = btoa(encodeURIComponent(json));
+      if (encoded.length > 60000) {
+        setMessage("⚠ 项目太大(图片占太多空间),改用 💾 导出项目");
+        return;
+      }
+      const url = `${window.location.origin}${window.location.pathname}#share=${encoded}`;
+      await navigator.clipboard.writeText(url);
+      setMessage(`✓ 分享链接已复制(${(url.length / 1024).toFixed(1)} KB)`);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setMessage(`✗ ${msg.slice(0, 80)}`);
+    }
+  }
+
   async function importProject(file: File) {
     try {
       const text = await file.text();
@@ -125,6 +142,15 @@ export function ExportBar({ playerRef, teams, onImport }: Props) {
               }}
             />
           </label>
+        </div>
+        <button
+          onClick={shareUrl}
+          className="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-black tracking-wide px-3 py-2 rounded transition"
+        >
+          🔗 复制分享链接(URL)
+        </button>
+        <div className="text-[10px] text-zinc-600 leading-relaxed">
+          快捷键:Space 播停 · ← / → 跳 1s · Shift+← / → 跳 5s
         </div>
       </div>
       <form onSubmit={submitWaitlist} className="space-y-2">

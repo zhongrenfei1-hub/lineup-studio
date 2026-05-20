@@ -18,20 +18,62 @@ export function StudioWorkspace() {
   const [orientation, setOrientation] = useState<Orientation>("landscape");
   const playerRef = useRef<PlayerRef>(null);
 
-  // 加载持久化数据(仅首次)
+  // 加载持久化数据(仅首次,URL hash 优先于 localStorage)
   useEffect(() => {
+    let loaded = false;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as ProTeam[];
-        if (Array.isArray(parsed) && parsed.length >= 1) {
-          setTeams(parsed);
+      if (typeof window !== "undefined" && window.location.hash.startsWith("#share=")) {
+        const encoded = window.location.hash.slice(7);
+        const json = decodeURIComponent(atob(encoded));
+        const data = JSON.parse(json);
+        if (Array.isArray(data.teams) && data.teams.length >= 1) {
+          setTeams(data.teams);
+          loaded = true;
         }
       }
     } catch {
-      // ignore
+      // ignore — fall back to localStorage
+    }
+    if (!loaded) {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as ProTeam[];
+          if (Array.isArray(parsed) && parsed.length >= 1) {
+            setTeams(parsed);
+          }
+        }
+      } catch {
+        // ignore
+      }
     }
     setHydrated(true);
+  }, []);
+
+  // 键盘快捷键
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      // 只在非 input/textarea 内才响应
+      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      const player = playerRef.current;
+      if (!player) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (player.isPlaying()) player.pause();
+        else player.play();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        const step = e.shiftKey ? 150 : 30;
+        player.seekTo(Math.max(0, player.getCurrentFrame() - step));
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        const step = e.shiftKey ? 150 : 30;
+        player.seekTo(player.getCurrentFrame() + step);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   // 保存到 localStorage,debounce 300ms 避免 slider 拖动每帧写
