@@ -6,6 +6,7 @@ import { PreviewPlayer } from "./PreviewPlayer";
 import { EditorPanel } from "./EditorPanel";
 import { TemplateLibrary } from "./TemplateLibrary";
 import { ExportBar } from "./ExportBar";
+import { ProjectList } from "./ProjectList";
 import { TEAMS, ProTeam } from "../composition/data";
 
 const STORAGE_KEY = "lineup-studio:teams";
@@ -156,6 +157,7 @@ export function StudioWorkspace() {
           />
         </div>
         <ExportBar playerRef={playerRef} teams={teams} onImport={setTeams} />
+        <ProjectList teams={teams} onLoad={setTeams} />
       </div>
       <div className="lg:sticky lg:top-6 space-y-3">
         <TemplateLibrary onPick={setTeams} />
