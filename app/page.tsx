@@ -1,5 +1,6 @@
 import { StudioWorkspace } from "./components/StudioWorkspace";
 import { WaitlistForm } from "./components/WaitlistForm";
+import { AuthButton } from "./components/AuthButton";
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
           >
             GitHub
           </a>
+          <AuthButton />
           <a
             href="#waitlist"
             className="bg-purple-500 hover:bg-purple-400 transition px-4 py-2 rounded-lg font-bold text-sm text-[#08080F] shadow-[0_0_18px_rgba(168,85,247,0.5)]"
