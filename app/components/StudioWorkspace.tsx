@@ -10,9 +10,12 @@ import { TEAMS, ProTeam } from "../composition/data";
 
 const STORAGE_KEY = "lineup-studio:teams";
 
+type Orientation = "landscape" | "portrait";
+
 export function StudioWorkspace() {
   const [teams, setTeams] = useState<ProTeam[]>(TEAMS);
   const [hydrated, setHydrated] = useState(false);
+  const [orientation, setOrientation] = useState<Orientation>("landscape");
   const playerRef = useRef<PlayerRef>(null);
 
   // 加载持久化数据(仅首次)
@@ -63,14 +66,53 @@ export function StudioWorkspace() {
           <div className="text-[10px] tracking-[4px] font-black text-zinc-500 uppercase">
             ↓ Live Preview · 实时同步右侧编辑
           </div>
-          <button
-            onClick={reset}
-            className="text-xs text-zinc-500 hover:text-purple-400 transition font-bold uppercase tracking-widest"
-          >
-            ↺ Reset
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="flex bg-zinc-900 rounded-md p-0.5 text-xs font-black tracking-widest uppercase">
+              <button
+                onClick={() => setOrientation("landscape")}
+                className={`px-3 py-1 rounded transition ${
+                  orientation === "landscape"
+                    ? "bg-purple-500 text-[#08080F]"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+                title="16:9 — YouTube / B 站"
+              >
+                16:9
+              </button>
+              <button
+                onClick={() => setOrientation("portrait")}
+                className={`px-3 py-1 rounded transition ${
+                  orientation === "portrait"
+                    ? "bg-purple-500 text-[#08080F]"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+                title="9:16 — 抖音 / 快手 (实验中)"
+              >
+                9:16
+              </button>
+            </div>
+            <button
+              onClick={reset}
+              className="text-xs text-zinc-500 hover:text-purple-400 transition font-bold uppercase tracking-widest"
+            >
+              ↺ Reset
+            </button>
+          </div>
         </div>
-        <PreviewPlayer teams={teams} playerRef={playerRef} />
+        <div
+          className={
+            orientation === "portrait"
+              ? "mx-auto"
+              : ""
+          }
+          style={orientation === "portrait" ? { maxWidth: 360 } : undefined}
+        >
+          <PreviewPlayer
+            teams={teams}
+            playerRef={playerRef}
+            orientation={orientation}
+          />
+        </div>
         <ExportBar playerRef={playerRef} />
       </div>
       <div className="lg:sticky lg:top-6 space-y-3">

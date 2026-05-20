@@ -1,0 +1,48 @@
+name: build · smoke · deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build static export
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Add nojekyll
+        run: touch out/.nojekyll
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          force_orphan: true
+          user_name: github-actions
+          user_email: github-actions@users.noreply.github.com
+          commit_message: "deploy from main · ${{ github.sha }}"
+
+      - name: Wait for Pages propagation (60s)
+        run: sleep 60
+
+      - name: Smoke test
+        run: bash scripts/smoke.sh
+        env:
+          LINEUP_URL: https://zhongrenfei1-hub.github.io/lineup-studio/

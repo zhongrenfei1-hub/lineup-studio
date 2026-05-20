@@ -57,6 +57,62 @@ const T1: ProTeam = {
   ],
 };
 
+const DRG: ProTeam = {
+  tag: "DRG" as ProTeam["tag"],
+  name: "Dragon Ranger Gaming",
+  region: "China",
+  logo: "",
+  color: "#22C55E",
+  accent: "#86EFAC",
+  players: [
+    {
+      id: "nicc",
+      alias: "nicc",
+      real: "Shao Yi-qun (邵逸群)",
+      avatar: "",
+      url: "",
+      tagline: "Initiator · Controller",
+      stats: { rating: 0.95, acs: 177.7, kd: 0.87, kast: 74, adr: 116.6, hs: 31, rnd: 384 },
+    },
+    {
+      id: "flex1n",
+      alias: "flex1n",
+      real: "Lo Rui (罗瑞)",
+      avatar: "",
+      url: "",
+      tagline: "Flex · Smokes",
+      stats: { rating: 0.95, acs: 171.5, kd: 0.87, kast: 72, adr: 109.6, hs: 24, rnd: 384 },
+    },
+    {
+      id: "life",
+      alias: "life",
+      real: "Qu Donghao (瞿东豪)",
+      avatar: "",
+      url: "",
+      tagline: "Sentinel · Sharpshooter",
+      stats: { rating: 0.80, acs: 189.8, kd: 0.79, kast: 68, adr: 124.5, hs: 37, rnd: 384 },
+    },
+    {
+      id: "vo0kashu",
+      alias: "vo0kashu",
+      real: "Ilya Ushakov",
+      avatar: "",
+      url: "",
+      tagline: "Star · Top Frag · CN #1",
+      stats: { rating: 1.27, acs: 223.1, kd: 1.24, kast: 74, adr: 151.3, hs: 28, rnd: 384 },
+    },
+    {
+      id: "akeman",
+      alias: "akeman",
+      real: "Zhang Haoran (张浩然) · 替补",
+      avatar: "",
+      url: "",
+      tagline: "Sub · Duelist",
+      stats: { rating: 0.92, acs: 195.0, kd: 0.95, kast: 71, adr: 128.0, hs: 26, rnd: 120 },
+    },
+  ],
+};
+
 const EDG = SAMPLE_TEAMS[0];
 const PRX = SAMPLE_TEAMS[1];
 
@@ -77,11 +133,25 @@ export const TEMPLATES: Template[] = [
     badge: "🇨🇳⚔️🌏",
   },
   {
+    id: "edg-vs-drg",
+    name: "EDG · DRG",
+    region: "中国内战 · VCT China",
+    teams: [EDG, DRG],
+    badge: "🇨🇳⚔️🇨🇳",
+  },
+  {
     id: "edg-vs-t1",
     name: "EDG · T1",
     region: "中国 vs 韩国",
     teams: [EDG, T1],
     badge: "🇨🇳⚔️🇰🇷",
+  },
+  {
+    id: "drg-vs-prx",
+    name: "DRG · PRX",
+    region: "Masters London · 入围",
+    teams: [DRG, PRX],
+    badge: "🐉⚔️🌏",
   },
   {
     id: "prx-vs-t1",

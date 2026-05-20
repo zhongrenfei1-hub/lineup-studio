@@ -8,11 +8,17 @@ import { ProTeam } from "../composition/data";
 export function PreviewPlayer({
   teams,
   playerRef,
+  orientation = "landscape",
 }: {
   teams?: ProTeam[];
   playerRef?: Ref<PlayerRef>;
+  orientation?: "landscape" | "portrait";
 }) {
-  const inputProps = useMemo(() => ({ teams }), [teams]);
+  const isPortrait = orientation === "portrait";
+  const inputProps = useMemo(
+    () => ({ teams, orientation }),
+    [teams, orientation],
+  );
 
   return (
     <Player
@@ -21,8 +27,8 @@ export function PreviewPlayer({
       inputProps={inputProps}
       durationInFrames={PRO_TOTAL_FRAMES}
       fps={30}
-      compositionWidth={1280}
-      compositionHeight={720}
+      compositionWidth={isPortrait ? 720 : 1280}
+      compositionHeight={isPortrait ? 1280 : 720}
       style={{
         width: "100%",
         borderRadius: 12,
